@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>SpecBot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="static/style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="main-heading">
+        Spec<span class="title-bot">Bot</span>- asystent medyczny
+      </h1>
+    </header>
+    <main>
+      <section class="entrace-section {% if specialist %}hidden {%endif%}">
+        <div class="bot-container">
+          <figure class="bot-img-wrapper">
+            <img
+              class="bot-img"
+              src="static/images/bot-pic.jpg"
+              alt="drawn picture of a robot"
+            />
+          </figure>
+
+          <p class="general-text">
+            Witaj! Opisz mi swoje objawy, a ja spróbuje Ci podpowiedzieć do
+            jakiego specjalisty masz sie udać.
+          </p>
+        </div>
+        <form method="post" class="form">
+          <div class="form-container">
+            <label for="name">Imię:</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+          <div class="form-container">
+            <label for="symptoms">Objawy:</label>
+            <textarea
+              placeholder="Tutaj wpisz swoje objawy. Na przykład: od kilku dni boli mnie gardło oraz mam zatkane zatoki"
+              id="symptoms"
+              name="symptoms"
+              required
+            ></textarea>
+          </div>
+          <button class="submit-btn" type="submit">Znajdź specjalistę</button>
+        </form>
+      </section>
+      <section class="result-section">
+        {% if specialist %}
+          <h2>Odpowiedź bota:</h2>
+          <div class="bots-wrapper">
+            <div class="bot-container">
+            <figure class="bot-img-wrapper">
+              <img
+                class="bot-img"
+                src="static/images/bot-pic.jpg"
+                alt="drawn picture of a robot"
+              />
+            </figure>
+
+            <p class="general-text">
+              Na podstawie objawów zalecany specjalista to: <b>{{specialist}}</b>.
+            </p>
+
+          </div>
+            {% if doctors == []%}
+            <div class="bot-container">
+              <figure class="bot-img-wrapper">
+                <img
+                  class="bot-img"
+                  src="static/images/bot-pic.jpg"
+                  alt="drawn picture of a robot"
+                />
+              </figure>
+              <p class="general-text">Niestety ale nie ma takiego specjalisty w Centrum Medycznym Pesmed.</p>
+            </div>
+            {% else %}
+             <div class="bot-container">
+              <figure class="bot-img-wrapper">
+                <img
+                  class="bot-img"
+                  src="static/images/bot-pic.jpg"
+                  alt="drawn picture of a robot"
+                />
+              </figure>
+               <p class="general-text">
+                Dostępnych specjalistów mozesz znaleźć tutaj:
+                  <a href="{{url}}-{{specialist}}-bydgoszcz/" target="_blank">{{url}}-{{specialist}}-bydgoszcz/</a> .
+              </p>
+            </div>
+            {% endif %}
+        </div>
+        {% endif%}
+
+        {% if doctors %}
+          <div class="doctors">
+            <h3 class="tertiary-heading">Dostępni lekarze:</h3>
+            <div class="doctors-wrapper">
+                {% for doctor in doctors %}
+                    <a href="{{doctor.link}}">
+                      <div class="doctor">
+                        <div class="img-wrapper">
+                          <img
+                            src="{{doctor.photo_url}}"
+                            alt="{{ doctor.name }}"
+                          />
+                        </div>
+                        <h4>{{ doctor.name }}</h4>
+                      </div>
+                      </a>
+                {% endfor %}
+            </div>
+            <form method="post" action="/reset">
+            <button class="submit-btn submit-btn--back" type="submit">
+              Wróć do formularza
+            </button>
+          </form>
+          </div>
+        {% endif %}
+      </section>
+    </main>
+  </body>
+</html>
